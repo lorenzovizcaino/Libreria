@@ -6,6 +6,7 @@ import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.antonio.libreria.ui.screens.EditarLibro
 
 import com.antonio.libreria.ui.screens.Libreria
 import com.antonio.libreria.ui.screens.LibreriaAnhadirLibro
@@ -31,6 +32,9 @@ fun Navigation() {
         composable(route = Screens.ResumenCompras.route) {
             ResumenCompras(navController,viewModel) //Nombre de la función composable a la que navegar
         }
+        composable(route = Screens.EditarLibro.route) {
+            EditarLibro(navController,viewModel) //Nombre de la función composable a la que navegar
+        }
 
 
 
@@ -38,6 +42,8 @@ fun Navigation() {
 
     }
 }
+
+
 
 
 

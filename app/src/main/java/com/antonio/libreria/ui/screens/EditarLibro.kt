@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,7 +17,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -43,23 +44,144 @@ import com.antonio.libreria.viewmodel.LibreriaViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LibreriaAnhadirLibro(navController: NavHostController, viewModel: LibreriaViewModel) {
+fun EditarLibro(navController: NavHostController, viewModel: LibreriaViewModel) {
     Scaffold(
         topBar = {
-            MyTopBar3(navController, viewModel)
+            MyTopBar4(navController, viewModel)
         },
         content = { padding ->
-            ContenidoDetalleAnhadir(navController, viewModel)
+            ContenidoEditarLibro(navController, viewModel)
         },
 
 
         )
 }
 
+@Composable
+fun MyTopBar4(
+    navController: NavHostController,
+    viewModel: LibreriaViewModel,
+
+) {
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+    val colorRojo = Color(232, 18, 36)
+    TopAppBar(
+
+        navigationIcon = {
+            IconButton(onClick = { navController.navigate(route = Screens.Libreria.route) }) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Ir hacia atras",
+                    tint = colorRojo,
+                    modifier = Modifier.size(60.dp)
+                )
+            }
+
+
+        },
+        title = {
+            Text(
+                "Libreria",
+                color = colorRojo,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+        },
+        actions = {
+
+            IconButton(onClick = {
+                showDialog=true
+
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Save,
+                    contentDescription = "guardar contacto",
+                    tint = colorRojo,
+                    modifier = Modifier.size(70.dp)
+                )
+            }
+
+
+        },
+
+
+
+
+    )
+    if(showDialog){
+        MyDialogEditarLibro(
+            onDismiss = { showDialog = false },
+            onAccept = {
+
+
+                viewModel.setaLibroAuxiliar(
+                    Libro(
+                        viewModel.libro.id,
+                        viewModel.titulo,
+                        viewModel.autor,
+                        viewModel.precio,
+                        viewModel.selecionado,
+
+                    )
+                )
+
+
+                viewModel.editarLibroEnFichero(context, viewModel.libro,viewModel.libroAux)
+                showDialog = false
+                navController.navigate(route = Screens.Libreria.route)
+
+
+            }
+        )
+    }
+
+
+
+
+}
+
+@Composable
+fun MyDialogEditarLibro(onDismiss: () -> Unit, onAccept: () -> Unit) {
+    val colorRojo = Color(232, 18, 36)
+    val colorAzul = Color(10, 48, 100)
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(text = "Editar Contacto")
+        },
+        text = {
+            Text(text = "¿Estás seguro de que deseas guardar este contacto?")
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onAccept()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor =colorRojo),
+                shape = RectangleShape
+            ) {
+                Text("Aceptar")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    onDismiss()
+                },
+                colors = ButtonDefaults.buttonColors(containerColor =colorAzul),
+                shape = RectangleShape
+            ) {
+                Text("Cancelar")
+            }
+        }
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContenidoDetalleAnhadir(navController: NavHostController, viewModel: LibreriaViewModel) {
-
+fun ContenidoEditarLibro(navController: NavHostController, viewModel: LibreriaViewModel) {
+    viewModel.cargarAtributosLibro()
     Card(
         border = BorderStroke(2.dp, Color.DarkGray), modifier = Modifier
             .fillMaxWidth()
@@ -105,107 +227,4 @@ fun ContenidoDetalleAnhadir(navController: NavHostController, viewModel: Libreri
         }
 
     }
-}
-
-@Composable
-fun MyTopBar3(navController: NavHostController, viewModel: LibreriaViewModel) {
-    val context = LocalContext.current
-    var showDialog by remember { mutableStateOf(false) }
-    TopAppBar(
-
-        navigationIcon = {
-            IconButton(onClick = { navController.navigate(route = Screens.Libreria.route) }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Ir hacia atras",
-
-                    modifier = Modifier.size(60.dp)
-                )
-            }
-
-
-        },
-        title = {
-            Text(
-                "Libreria",
-
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        },
-        actions = {
-
-            IconButton(onClick = {
-                showDialog = true
-
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Save,
-                    contentDescription = "guardar contacto",
-
-                    modifier = Modifier.size(70.dp)
-                )
-            }
-
-
-        })
-    if (showDialog) {
-        MyDialogGuardarLibro(
-            onDismiss = { showDialog = false },
-            onAccept = {
-
-
-                viewModel.getLibro(
-                    Libro(
-                        viewModel.CalcularId() + 1,
-                        viewModel.titulo,
-                        viewModel.autor,
-                        viewModel.precio,
-                        viewModel.selecionado
-                    )
-                )
-                viewModel.guardarLibroEnFichero(context, viewModel.libro)
-                showDialog = false
-                navController.navigate(route = Screens.Libreria.route)
-
-
-            }
-        )
-    }
-}
-
-@Composable
-fun MyDialogGuardarLibro(onDismiss: () -> Unit, onAccept: () -> Unit) {
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(text = "Guardar Contacto")
-        },
-        text = {
-            Text(text = "¿Estás seguro de que deseas guardar este contacto?")
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    onAccept()
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                shape = RectangleShape
-            ) {
-                Text("Aceptar")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    onDismiss()
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-                shape = RectangleShape
-            ) {
-                Text("Cancelar")
-            }
-        }
-    )
 }
