@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.antonio.libreria.model.Libro
 import java.io.EOFException
 import java.io.File
@@ -14,7 +15,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.text.DecimalFormat
 
-class LibreriaViewModel {
+class LibreriaViewModel :ViewModel(){
 
 
     var listaLibros= mutableListOf<Libro>(

@@ -1,7 +1,9 @@
 package com.antonio.libreria.ui.navigation
 
 sealed class Screens(val route:String) {
-    object Libreria: Screens("initial_screen")
+
+    object Menu: Screens("initial_screen")
+    object Libreria: Screens("libreria")
     object LibreriaAnhadirLibro: Screens("añadir un Libro")
     object ResumenCompras: Screens("Resumen compra Libros")
     object EditarLibro: Screens("Editar Libros Libros")
