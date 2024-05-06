@@ -140,6 +140,7 @@ fun LoginButton(viewModel: InicioViewModel, navController: NavController, modifi
         onClick = {
             viewModel.listaLogin.forEach{ item ->
                 if(item.email.equals(viewModel.email) && item.password.equals(viewModel.password)){
+                    viewModel.getEmail(item.email)
                     viewModel.getusuarioCorrecto(true)
                 }
 
@@ -147,7 +148,13 @@ fun LoginButton(viewModel: InicioViewModel, navController: NavController, modifi
         }
             if(viewModel.usuarioCorrecto){
                 viewModel.getusuarioCorrecto(false)
-                navController.navigate(route = Screens.Libreria.route)
+                println("EMAIL:"+viewModel.email)
+                if(viewModel.email.equals( "lorenzovizcaino@gmail.com")){
+                    navController.navigate(route = Screens.LibreriaRoot.route)
+                }else{
+                    navController.navigate(route = Screens.Libreria.route)
+                }
+
 
             }else{
 
@@ -250,7 +257,7 @@ fun Email(email: String, onTextChanged: (String) -> Unit, modifier: Modifier) {
 @Composable
 fun ImageLogo(modifier: Modifier) {
     Image(
-        painter = painterResource(id = R.drawable.logo_libreria),
+        painter = painterResource(id = R.drawable.libreria),
         contentDescription = "logo",
         modifier = modifier.size(250.dp)
     )

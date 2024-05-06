@@ -27,6 +27,9 @@ fun Navigation() {
         composable(route = Screens.Menu.route) {
             Menu(navController,viewModelInicio) //Nombre de la función composable a la que navegar
         }
+        composable(route = Screens.LibreriaRoot.route) {
+            Libreria(navController,viewModel) //Nombre de la función composable a la que navegar
+        }
 
         composable(route = Screens.Libreria.route) {
             Libreria(navController,viewModel) //Nombre de la función composable a la que navegar
