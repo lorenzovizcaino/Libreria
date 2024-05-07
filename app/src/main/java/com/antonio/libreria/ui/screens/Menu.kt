@@ -135,6 +135,8 @@ fun Body(modifier: Modifier, viewModel: InicioViewModel, navController: NavContr
 
 @Composable
 fun LoginButton(viewModel: InicioViewModel, navController: NavController, modifier: Modifier) {
+    var root="lorenzovizcaino@gmail.com"
+
     var context= LocalContext.current
     Button(
         onClick = {
@@ -149,7 +151,7 @@ fun LoginButton(viewModel: InicioViewModel, navController: NavController, modifi
             if(viewModel.usuarioCorrecto){
                 viewModel.getusuarioCorrecto(false)
                 println("EMAIL:"+viewModel.email)
-                if(viewModel.email.equals( "lorenzovizcaino@gmail.com")){
+                if(viewModel.email.equals(root)){
                     navController.navigate(route = Screens.LibreriaRoot.route)
                 }else{
                     navController.navigate(route = Screens.Libreria.route)

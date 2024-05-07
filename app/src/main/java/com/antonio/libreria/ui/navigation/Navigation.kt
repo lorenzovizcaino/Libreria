@@ -10,6 +10,7 @@ import com.antonio.libreria.ui.screens.EditarLibro
 
 import com.antonio.libreria.ui.screens.Libreria
 import com.antonio.libreria.ui.screens.LibreriaAnhadirLibro
+import com.antonio.libreria.ui.screens.LibreriaRoot
 import com.antonio.libreria.ui.screens.Menu
 import com.antonio.libreria.ui.screens.ResumenCompras
 import com.antonio.libreria.viewmodel.InicioViewModel
@@ -28,7 +29,7 @@ fun Navigation() {
             Menu(navController,viewModelInicio) //Nombre de la función composable a la que navegar
         }
         composable(route = Screens.LibreriaRoot.route) {
-            Libreria(navController,viewModel) //Nombre de la función composable a la que navegar
+            LibreriaRoot(navController,viewModel) //Nombre de la función composable a la que navegar
         }
 
         composable(route = Screens.Libreria.route) {
