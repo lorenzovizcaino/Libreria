@@ -26,7 +26,7 @@ fun Navigation() {
     NavHost(navController, startDestination = Screens.Menu.route) {
         //pantalla principal con la navegación
         composable(route = Screens.Menu.route) {
-            Menu(navController,viewModelInicio) //Nombre de la función composable a la que navegar
+            Menu(navController,viewModelInicio,viewModel) //Nombre de la función composable a la que navegar
         }
         composable(route = Screens.LibreriaRoot.route) {
             LibreriaRoot(navController,viewModel) //Nombre de la función composable a la que navegar

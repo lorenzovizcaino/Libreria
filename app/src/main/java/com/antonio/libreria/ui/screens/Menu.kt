@@ -50,11 +50,11 @@ import androidx.navigation.NavController
 import com.antonio.libreria.R
 import com.antonio.libreria.ui.navigation.Screens
 import com.antonio.libreria.viewmodel.InicioViewModel
-
+import com.antonio.libreria.viewmodel.LibreriaViewModel
 
 
 @Composable
-fun Menu(navController: NavController, viewModel: InicioViewModel) {
+fun Menu(navController: NavController, viewModel: InicioViewModel,viewModelLibreria: LibreriaViewModel) {
 
     Box(
         Modifier
@@ -65,7 +65,8 @@ fun Menu(navController: NavController, viewModel: InicioViewModel) {
         Body(
             Modifier
                 .align(Alignment.Center)
-                .fillMaxWidth(),viewModel,navController
+                .fillMaxWidth(),viewModel,navController,viewModelLibreria
+
         )
         Footer(
             Modifier
@@ -101,7 +102,12 @@ fun Footer(modifier: Modifier) {
 }
 
 @Composable
-fun Body(modifier: Modifier, viewModel: InicioViewModel, navController: NavController) {
+fun Body(
+    modifier: Modifier,
+    viewModel: InicioViewModel,
+    navController: NavController,
+    viewModelLibreria: LibreriaViewModel
+) {
 
     Column(modifier = modifier) {
         ImageLogo(modifier)
@@ -119,7 +125,7 @@ fun Body(modifier: Modifier, viewModel: InicioViewModel, navController: NavContr
         ForgotPassword()
         Spacer(modifier = Modifier.size(16.dp))
 
-        LoginButton(viewModel, navController, modifier)
+        LoginButton(viewModel, viewModelLibreria,navController, modifier)
         Spacer(modifier = Modifier.size(16.dp))
 
 
@@ -134,7 +140,12 @@ fun Body(modifier: Modifier, viewModel: InicioViewModel, navController: NavContr
 
 
 @Composable
-fun LoginButton(viewModel: InicioViewModel, navController: NavController, modifier: Modifier) {
+fun LoginButton(
+    viewModel: InicioViewModel,
+    viewModelLibreria: LibreriaViewModel,
+    navController: NavController,
+    modifier: Modifier
+) {
     var root="lorenzovizcaino@gmail.com"
 
     var context= LocalContext.current
@@ -154,6 +165,7 @@ fun LoginButton(viewModel: InicioViewModel, navController: NavController, modifi
                 if(viewModel.email.equals(root)){
                     navController.navigate(route = Screens.LibreriaRoot.route)
                 }else{
+                    viewModelLibreria.leerLibrosArchivo(context)
                     navController.navigate(route = Screens.Libreria.route)
                 }
 
@@ -259,7 +271,7 @@ fun Email(email: String, onTextChanged: (String) -> Unit, modifier: Modifier) {
 @Composable
 fun ImageLogo(modifier: Modifier) {
     Image(
-        painter = painterResource(id = R.drawable.libreria),
+        painter = painterResource(id = R.drawable.logo_libreria),
         contentDescription = "logo",
         modifier = modifier.size(250.dp)
     )

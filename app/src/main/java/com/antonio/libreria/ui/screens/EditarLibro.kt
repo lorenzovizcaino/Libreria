@@ -69,7 +69,7 @@ fun MyTopBar4(
     TopAppBar(
 
         navigationIcon = {
-            IconButton(onClick = { navController.navigate(route = Screens.Libreria.route) }) {
+            IconButton(onClick = { navController.navigate(route = Screens.LibreriaRoot.route) }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Ir hacia atras",
@@ -129,7 +129,7 @@ fun MyTopBar4(
 
                 viewModel.editarLibroEnFichero(context, viewModel.libro,viewModel.libroAux)
                 showDialog = false
-                navController.navigate(route = Screens.Libreria.route)
+                navController.navigate(route = Screens.LibreriaRoot.route)
 
 
             }

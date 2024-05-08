@@ -75,16 +75,7 @@ fun MyTopBar(navController: NavHostController, viewModel: LibreriaViewModel) {
         title = { Text("Libreria TEIS", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
         actions = {
 
-            IconButton(onClick = {
-                navController.navigate(route=Screens.LibreriaAnhadirLibro.route)
 
-            }) {
-                Icon(imageVector = Icons.Filled.Add,
-                    contentDescription = "añadir libro",
-
-                    modifier = Modifier.size(80.dp)
-                )
-            }
 
 
 
@@ -121,13 +112,13 @@ fun MyTopBar(navController: NavHostController, viewModel: LibreriaViewModel) {
 @Composable
 fun Contenido(navController: NavHostController, viewModel: LibreriaViewModel) {
     val context = LocalContext.current
-    viewModel.guardarListaEnFichero(context)
+
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(top = 60.dp)
     ) {
-        //items(viewModel.listaLibros){  //si se lee directamente de la lista sin pasar por el fichero
-        items(viewModel.leerLibrosArchivo(context)){
+        items(viewModel.listaLibrosLeidosFichero){  //si se lee directamente de la lista sin pasar por el fichero
+        //items(viewModel.leerLibrosArchivo(context)){
             ItemLibros(
                 viewModel=viewModel,
                 libro=it,
@@ -142,7 +133,7 @@ fun Contenido(navController: NavHostController, viewModel: LibreriaViewModel) {
 fun ItemLibros(viewModel: LibreriaViewModel, libro: Libro, navController: NavHostController) {
     var context= LocalContext.current
     var isChecked by remember { mutableStateOf(libro.selecionado) }
-    var showDialog by remember { mutableStateOf(false) }
+
     Card(border = BorderStroke(2.dp, Color.DarkGray),modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 8.dp, vertical = 8.dp)) {
@@ -152,53 +143,8 @@ fun ItemLibros(viewModel: LibreriaViewModel, libro: Libro, navController: NavHos
                 Text(text = libro.titulo)
                 Text(text = libro.autor)
 
-                Row(){
-
-                        IconButton(
-                            onClick = {
-                                viewModel.setaLibro(libro)
-                                navController.navigate(route = Screens.EditarLibro.route)
-                            },
-                            modifier = Modifier.padding(start = 10.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = "Editar",
-                                tint = Color.Black,
-
-                                )
-                        }
-
-                        IconButton(onClick = {
-                            showDialog=true
-
-                        }, modifier = Modifier.padding(start = 10.dp)) {
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = "Borrar",
-                                tint = Color.Black,
-                                //modifier = Modifier.align(alignment = Alignment.End)
-
-                            )
-                        }
 
 
-
-
-                }
-                if(showDialog){
-                    MyDialogBorrarLibro(
-                        onDismiss = { showDialog = false },
-                        onAccept = {
-                            viewModel.setaLibro(libro)
-                            viewModel.borrarLibro(context, viewModel.libro)
-                            navController.navigate(route = Screens.Libreria.route)
-
-
-
-                        }
-                    )
-                }
 
                 
             }
@@ -206,7 +152,8 @@ fun ItemLibros(viewModel: LibreriaViewModel, libro: Libro, navController: NavHos
                 .fillMaxWidth()
                 .padding(10.dp)){
                 Text(text = libro.precio.toString())
-                Checkbox(checked = isChecked, onCheckedChange = {
+                Checkbox(checked = isChecked,
+                    onCheckedChange = {
                     isChecked=it
                     libro.selecionado=isChecked
                     if (isChecked) {
@@ -219,8 +166,7 @@ fun ItemLibros(viewModel: LibreriaViewModel, libro: Libro, navController: NavHos
                         viewModel.restarUnidadesLibros()
                         viewModel.listaComprar.remove(libro)
                     }
-                    viewModel.borrarLibro(context,libro)
-                    viewModel.guardarLibroEnFichero(context,libro)
+
 
                 })
 
@@ -230,41 +176,4 @@ fun ItemLibros(viewModel: LibreriaViewModel, libro: Libro, navController: NavHos
     }
 }
 
-@Composable
-fun MyDialogBorrarLibro(onDismiss: () -> Unit, onAccept: () -> Unit) {
-    val colorRojo=Color(232, 18, 36)
-    val colorAzul=Color(10, 48, 100)
-    val colorAmarillo = Color(235, 203, 73)
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(text = "Borrar Contacto")
-        },
-        text = {
-            Text(text = "¿Estás seguro de que deseas Borrar este contacto?")
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    onAccept()
-                },
-                colors = ButtonDefaults.buttonColors(containerColor =colorRojo),
-                shape = RectangleShape
 
-            ) {
-                Text("Aceptar")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    onDismiss()
-                },
-                colors = ButtonDefaults.buttonColors(containerColor =colorAzul),
-                shape = RectangleShape
-            ) {
-                Text("Cancelar")
-            }
-        }
-    )
-}

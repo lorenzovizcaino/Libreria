@@ -114,7 +114,7 @@ fun MyTopBar3(navController: NavHostController, viewModel: LibreriaViewModel) {
     TopAppBar(
 
         navigationIcon = {
-            IconButton(onClick = { navController.navigate(route = Screens.Libreria.route) }) {
+            IconButton(onClick = { navController.navigate(route = Screens.LibreriaRoot.route) }) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Ir hacia atras",
@@ -166,7 +166,7 @@ fun MyTopBar3(navController: NavHostController, viewModel: LibreriaViewModel) {
                 )
                 viewModel.guardarLibroEnFichero(context, viewModel.libro)
                 showDialog = false
-                navController.navigate(route = Screens.Libreria.route)
+                navController.navigate(route = Screens.LibreriaRoot.route)
 
 
             }
